@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=wlev2harmonic
+Comment=wlev2harmonic
+Exec=wlev2harmonic
+Icon=wlev2harmonic
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Education;Science;Geography;
