@@ -319,7 +319,9 @@ ENDIF(GETTEXT_MSGFMT_EXECUTABLE)
 
 # On Windows builds, copy the wxWidgets dlls and  to the executable directory
 IF(WIN32 AND NOT UNIX)
-INSTALL(DIRECTORY wxWidgets/ DESTINATION "." )
+	INSTALL(FILES "${wxWidgets_LIB_DIR}/wxbase28u_vc_custom.dll" DESTINATION "." )
+	INSTALL(FILES "${wxWidgets_LIB_DIR}/wxmsw28u_core_vc_custom.dll" DESTINATION "." )
+##INSTALL(DIRECTORY wxWidgets/ DESTINATION "." )
 ##INSTALL(DIRECTORY buildwin/vc10/ DESTINATION ".\\\\vc10" )
 ENDIF(WIN32 AND NOT UNIX)
 
