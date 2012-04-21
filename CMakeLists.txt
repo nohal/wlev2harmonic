@@ -107,7 +107,9 @@ MESSAGE (STATUS "*** Staging to build ${PACKAGE_NAME}  ***")
 IF (PREFIX)
 	SET(CMAKE_INSTALL_PREFIX ${PREFIX})
 ENDIF (PREFIX)
+
 SET(PREFIX_BIN bin)
+
 SET(PREFIX_INCLUDE include)
 SET(PREFIX_DATA share)
 SET(PREFIX_PKGDATA ${PREFIX_DATA}/${PACKAGE_NAME})
@@ -318,13 +320,12 @@ ENDIF(GETTEXT_MSGFMT_EXECUTABLE)
 # On Windows builds, copy the wxWidgets dlls and  to the executable directory
 IF(WIN32 AND NOT UNIX)
 INSTALL(DIRECTORY wxWidgets/ DESTINATION "." )
-INSTALL(DIRECTORY buildwin/vc10/ DESTINATION ".\\\\vc10" )
+##INSTALL(DIRECTORY buildwin/vc10/ DESTINATION ".\\\\vc10" )
 ENDIF(WIN32 AND NOT UNIX)
 
 MESSAGE (STATUS "")
 
 # build a CPack driven installer package
-#include (InstallRequiredSystemLibraries)
 SET(CPACK_PACKAGE_NAME "wlev2harmonic")
 SET(CPACK_PACKAGE_VENDOR "github.com/nohal/wlev2harmonic")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "wlev2harmonic ${PACKAGE_VERSION}")
@@ -333,41 +334,52 @@ SET(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
 SET(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
 SET(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH})
 SET(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_CURRENT_BINARY_DIR};${PACKAGE_NAME};ALL;/")
-SET(CPACK_PACKAGE_EXECUTABLES ${PACKAGE_NAME} "wlev2harmonic")
-
-
+SET(CPACK_PACKAGE_INSTALL_DIRECTORY ${PACKAGE_NAME})
 
 IF(WIN32 AND NOT UNIX)
   # There is a bug in NSI that does not handle full unix paths properly. Make
   # sure there is at least one set of four (4) backlasshes.
+  SET(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/src/bitmaps\\\\wlev2harmonic.ico")
 
-  SET(CPACK_NSIS_INSTALLED_ICON_NAME "wlev2harmonic.exe")
+  SET(CPACK_PACKAGE_EXECUTABLES "..\\\\wlev2harmonic" ${PACKAGE_NAME})
+  
+  SET(CPACK_NSIS_INSTALLED_ICON_NAME "..\\\\wlev2harmonic.exe")
   SET(CPACK_NSIS_PACKAGE_NAME_LC "wlev2harmonic")
 
 #  These lines set the name of the Windows Start Menu shortcut and the icon that goes with it
-##  SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME} ${PACKAGE_VERSION}")
-  SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/src/bitmaps\\\\wlev2harmonic.ico")
+  SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME} ${PACKAGE_VERSION}")
+  SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/src/bitmaps\\\\wlev2harmonic.bmp")
 
   SET(CPACK_PACKAGE_FILE_NAME "${PACKAGE_NAME}_${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}_setup" )
+# We have to install system libraries ourselves, but use 
+# InstallRequiredSystemLibraries to figure out what they are
+  SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP true) 
+  INCLUDE(InstallRequiredSystemLibraries)
+  # Include system runtime libraries in the installation if any are
+  # specified by CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS.
+  IF(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
+    # DLLs go same place as programs on Windows
+    INSTALL(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION ".")
+  ENDIF(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
   
-  SET(CPACK_BUILDWIN_DIR "${CMAKE_SOURCE_DIR}/buildwin")  #Gunther
+##  SET(CPACK_BUILDWIN_DIR "${CMAKE_SOURCE_DIR}/buildwin")
   
 # Install the VC100 Redistributable
-  SET(vc10_redist "vcredist_x86.exe")
+##  SET(vc10_redist "vcredist_x86.exe")
 
-    STRING( REPLACE "/" "\\\\" Temp_vc10_redist ${vc10_redist} )
-    GET_FILENAME_COMPONENT( VC10_FILE_NAME ${vc10_redist} NAME )
-    SET( CPACK_NSIS_EXTRA_INSTALL_COMMANDS ${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}
-      "ExecWait '\\\"$INSTDIR\\\\vc10\\\\${VC10_FILE_NAME}\\\" /q /norestart' $0\\n"
-      " Remove folder\\n  RMDir /r \\\"$INSTDIR\\\\vc10\\\"\\n\\n" )
+##    STRING( REPLACE "/" "\\\\" Temp_vc10_redist ${vc10_redist} )
+##    GET_FILENAME_COMPONENT( VC10_FILE_NAME ${vc10_redist} NAME )
+##    SET( CPACK_NSIS_EXTRA_INSTALL_COMMANDS ${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}
+##      "ExecWait '\\\"$INSTDIR\\\\vc10\\\\${VC10_FILE_NAME}\\\" /q /norestart' $0\\n"
+##      " Remove folder\\n  RMDir /r \\\"$INSTDIR\\\\vc10\\\"\\n\\n" )
 
 
 ELSE(WIN32 AND NOT UNIX)
   SET(CPACK_PACKAGE_INSTALL_DIRECTORY ${PACKAGE_NAME})
-  SET(CPACK_STRIP_FILES "wlev2harmonic.exe")
+  SET(CPACK_STRIP_FILES "bin/wlev2harmonic")
   SET(CPACK_SOURCE_STRIP_FILES "")
   SET(CPACK_PACKAGE_FILE_NAME "${PACKAGE_NAME}_${PACKAGE_VERSION}-${PACKAGE_RELEASE}_${ARCH}" )
-
+  SET(CPACK_PACKAGE_EXECUTABLES ${PACKAGE_NAME} "wlev2harmonic")
 ENDIF(WIN32 AND NOT UNIX)
 
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/data/license.txt")
@@ -376,16 +388,6 @@ IF (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/README")
     SET(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README")
 ENDIF ()
 SET(CPACK_SOURCE_GENERATOR "TGZ")
-
-# The following components are regex's to match anywhere (unless anchored)
-# in absolute path + filename to find files or directories to be excluded
-# from source tarball.
-set(CPACK_SOURCE_IGNORE_FILES
-"\\\\.cvsignore$"
-"^${CMAKE_CURRENT_SOURCE_DIR}.*/CVS/"
-"^${CMAKE_CURRENT_SOURCE_DIR}/build*"
-"^${CPACK_PACKAGE_INSTALL_DIRECTORY}/*"
-)
 
 IF(UNIX AND NOT APPLE)
     SET(CPACK_GENERATOR ${PACKAGE_FORMAT})
