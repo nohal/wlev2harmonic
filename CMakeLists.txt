@@ -163,12 +163,18 @@ FIND_PACKAGE(Gettext REQUIRED)
 # header files and cpp/c files and CMake will sort them out
 
 SET(HDRS
+		include/wlev.h
                 include/wlev2harmonic.h
+		src/wlev2harmonicguidef.h
+		src/wlev2harmonicgui.h
 )
 
 SET(SRCS 
+		src/wlev.cpp
 		src/wlev2harmonic.cpp
-    )
+                src/wlev2harmonicguidef.cpp
+                src/wlev2harmonicgui.cpp
+)
 
 SET(PACKAGE_HEADERS ""
 )

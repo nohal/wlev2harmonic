@@ -150,6 +150,10 @@ bool MyApp::OnInit()
 
       setlocale(LC_NUMERIC,"C");
 
+      mainwindow = new wlev2harmonicgui(NULL);
+      mainwindow->app = this;
+      mainwindow->Show(true);
+
       return TRUE;
 }
 

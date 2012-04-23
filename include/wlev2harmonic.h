@@ -38,6 +38,8 @@
 #include "wx/msw/private.h"
 #endif
 
+#include "wlev2harmonicgui.h"
+
 class MyApp: public wxApp
 {
   public:
@@ -48,6 +50,9 @@ class MyApp: public wxApp
     void OnActivateApp(wxActivateEvent& event);
 
     DECLARE_EVENT_TABLE()
+
+  private:
+    wlev2harmonicgui *mainwindow;
 };
 
 #endif
