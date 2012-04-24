@@ -426,6 +426,6 @@ wxString wlev::GetHCText(wxString hc)
             c.frequency = 0.0;
             c.value = 0.0;
       }
-      wxString s = wxString::Format(_T("%s %.4f %6.2f\n"), c.const_code.Pad(15).Left(15).c_str(), c.value, c.angle);
+      wxString s = wxString::Format(_T("%s%.4f  %06.2f\n"), c.const_code.Pad(15).Left(15).c_str(), c.value, c.angle);
       return s;
 }
