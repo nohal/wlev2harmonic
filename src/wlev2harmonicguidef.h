@@ -23,6 +23,7 @@
 #include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/radiobut.h>
 #include <wx/panel.h>
 #include <wx/notebook.h>
 #include <wx/frame.h>
@@ -45,6 +46,8 @@ class wlev2harmonicguidef : public wxFrame
 		wxTextCtrl* m_textWlev;
 		wxButton* m_buttonLoadWlev;
 		wxButton* m_buttonConvert;
+		wxRadioButton* m_rbFrmCHS;
+		wxRadioButton* m_rbFrmHarm;
 		wxTextCtrl* m_textHarmonic;
 		wxButton* m_buttonSaveHarmonic;
 		

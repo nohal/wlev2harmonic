@@ -66,7 +66,7 @@ class wlev
       void ParseAmplitudeValueLine(wxString line);
       void ParseConstLine(wxString line);
 
-      wxString GetHCText(wxString hc);
+      wxString GetHCText(wxString hc, wxString wlev_name = wxEmptyString);
 
       wxString station_name;
       double amplitude;

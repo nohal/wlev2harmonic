@@ -416,9 +416,13 @@ wxString wlev::GetStationText()
 //Produces the text line for a single harmonic constant
 //Format:
 //J1             0.0070  126.80
-wxString wlev::GetHCText(wxString hc)
+wxString wlev::GetHCText(wxString hc, wxString wlev_name)
 {
-      HarmonicConstant c = this->hcs[hc];
+      HarmonicConstant c;
+      if (wlev_name == wxEmptyString)
+            c = this->hcs[hc];
+      else
+            c = this->hcs[wlev_name];
       if (c.const_code == wxEmptyString) //not found
       {
             c.const_code = hc;

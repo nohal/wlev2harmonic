@@ -58,6 +58,18 @@ wlev2harmonicguidef::wlev2harmonicguidef( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
 	
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_rbFrmCHS = new wxRadioButton( m_panelConvert, wxID_ANY, _("CHS"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer6->Add( m_rbFrmCHS, 0, wxALL, 5 );
+	
+	m_rbFrmHarm = new wxRadioButton( m_panelConvert, wxID_ANY, _("173 harmonics"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer6->Add( m_rbFrmHarm, 0, wxALL, 5 );
+	
+	
+	bSizer5->Add( bSizer6, 0, wxEXPAND, 5 );
+	
 	m_textHarmonic = new wxTextCtrl( m_panelConvert, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTE_DONTWRAP|wxTE_MULTILINE );
 	m_textHarmonic->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
 	
